@@ -1,17 +1,19 @@
-package com.yourname.myapp
+package com.example.mykazi
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import com.example.mykazi.R
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.FirebaseDatabase
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var textViewTitle: TextView
     private lateinit var editTextName: EditText
     private lateinit var editTextJob: EditText
+    private lateinit var editTextPhoneNumber: EditText
+    private lateinit var editTextLocation: EditText
     private lateinit var buttonSubmit: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,19 +24,33 @@ class MainActivity : AppCompatActivity() {
         textViewTitle = findViewById(R.id.personaldetails)
         editTextName = findViewById(R.id.editText1)
         editTextJob = findViewById(R.id.editText2)
+        editTextPhoneNumber = findViewById(R.id.editText3)
+        editTextLocation = findViewById(R.id.editText4)
         buttonSubmit = findViewById(R.id.buttonSubmit)
 
-        // Button click listener
         buttonSubmit.setOnClickListener {
             val name = editTextName.text.toString().trim()
             val job = editTextJob.text.toString().trim()
+            val phone = editTextPhoneNumber.text.toString().trim()
+            val location = editTextLocation.text.toString().trim()
 
-            // Optional: validate input
-            if (name.isEmpty() || job.isEmpty()) {
-                textViewTitle.text = "Please fill in both fields"
-            } else {
-                textViewTitle.text = "Name: $name\nJob: $job"
+            if (name.isEmpty() || job.isEmpty() || phone.isEmpty() || location.isEmpty()) {
+                textViewTitle.text = "Please fill all details"
+                return@setOnClickListener
             }
+
+            val user = User(name, job, phone, location)
+
+            val database = FirebaseDatabase.getInstance()
+            val usersRef = database.getReference("users")
+
+            usersRef.child(phone).setValue(user)
+                .addOnSuccessListener {
+                    textViewTitle.text = "Uploaded successfully!"
+                }
+                .addOnFailureListener {
+                    textViewTitle.text = "Failed to upload"
+                }
         }
     }
 }
