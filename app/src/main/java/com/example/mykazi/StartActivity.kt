@@ -19,7 +19,7 @@ class StartActivity : AppCompatActivity() {
         }
 
         binding.btnLogin.setOnClickListener {
-            startActivity(Intent(this, UserListActivity::class.java))
+            startActivity(Intent(this, LoginActivity   ::class.java))
         }
     }
 }
