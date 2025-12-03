@@ -1,67 +1,110 @@
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="30dp">
+    android:fillViewport="true"
+    android:scrollbars="vertical">
 
-    <!-- Title TextView -->
-    <TextView
-        android:id="@+id/personaldetails"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="PERSONAL DETAILS"
-        android:textSize="26sp"
-        android:layout_marginBottom="40dp"/>
+        android:padding="30dp">
 
-    <!-- First input field -->
-    <EditText
-        android:id="@+id/editText1"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:hint="Name"
-        android:inputType="text"
-        android:textSize="20sp"
-        android:padding="12dp"
-        android:layout_marginBottom="20dp"/>
+        <!-- Title -->
+        <TextView
+            android:id="@+id/personaldetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="PERSONAL DETAILS"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="40dp"/>
 
-    <!-- Second input field -->
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:hint="JOB"
-        android:textSize="20sp"
-        android:inputType="text"
-        android:padding="12dp"
-        android:layout_marginBottom="30dp"/>
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:hint="PHONE NUMBER"
-        android:textSize="20sp"
-        android:inputType="text"
-        android:padding="12dp"
-        android:layout_marginBottom="30dp"/>
-    <EditText
-        android:id="@+id/editText4"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:hint="LOCATION"
-        android:textSize="20sp"
-        android:inputType="text"
-        android:padding="12dp"
-        android:layout_marginBottom="30dp"/>
+        <!-- Name input -->
+        <EditText
+            android:id="@+id/editText1"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:hint="Name"
+            android:inputType="text"
+            android:textSize="20sp"
+            android:padding="12dp"
+            app:layout_constraintTop_toBottomOf="@id/personaldetails"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="20dp"/>
 
-    <!-- Button -->
-    <Button
-        android:id="@+id/buttonSubmit"
-        android:layout_width="wrap_content"
-        android:layout_height="56dp"
-        android:text="Submit"
-        android:textSize="20sp"
-        android:layout_marginTop="20dp"/>
+        <!-- Job input -->
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:hint="JOB"
+            android:inputType="text"
+            android:textSize="20sp"
+            android:padding="12dp"
+            app:layout_constraintTop_toBottomOf="@id/editText1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="30dp"/>
 
-</LinearLayout>
+        <!-- Phone input -->
+        <EditText
+            android:id="@+id/editText3"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:hint="PHONE NUMBER"
+            android:inputType="phone"
+            android:textSize="20sp"
+            android:padding="12dp"
+            app:layout_constraintTop_toBottomOf="@id/editText2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="30dp"/>
+
+        <!-- Location input -->
+        <EditText
+            android:id="@+id/editText4"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:hint="LOCATION"
+            android:inputType="text"
+            android:textSize="20sp"
+            android:padding="12dp"
+            app:layout_constraintTop_toBottomOf="@id/editText3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="30dp"/>
+
+        <!-- Submit button -->
+        <Button
+            android:id="@+id/buttonSubmit"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:text="Submit"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/editText4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="20dp"/>
+
+        <!-- Login button -->
+        <Button
+            android:id="@+id/buttonlogin"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:text="Log In"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/buttonSubmit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
