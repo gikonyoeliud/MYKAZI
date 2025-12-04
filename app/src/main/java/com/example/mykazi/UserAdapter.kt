@@ -12,6 +12,8 @@ class UserAdapter(private val userList: List<User>) :
     class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val jobTextView: TextView = itemView.findViewById(R.id.jobTextView)
         val phoneTextView: TextView = itemView.findViewById(R.id.phoneTextView)
+
+        val locationTextView: TextView=itemView.findViewById(R.id.locationTextView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
@@ -24,6 +26,7 @@ class UserAdapter(private val userList: List<User>) :
         val user = userList[position]
         holder.jobTextView.text = "Job: ${user.job}"
         holder.phoneTextView.text = "Phone: ${user.phone}"
+        holder.locationTextView.text="Location : ${user.location}"
     }
 
     override fun getItemCount(): Int = userList.size

@@ -30,7 +30,7 @@
             android:id="@+id/editText1"
             android:layout_width="0dp"
             android:layout_height="56dp"
-            android:hint="Name"
+            android:hint="FIRST NAME"
             android:inputType="text"
             android:textSize="20sp"
             android:padding="12dp"

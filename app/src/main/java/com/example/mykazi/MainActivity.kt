@@ -16,28 +16,27 @@ class MainActivity : AppCompatActivity() {
     private lateinit var editTextPhoneNumber: EditText
     private lateinit var editTextLocation: EditText
     private lateinit var buttonSubmit: Button
-
-    private lateinit var buttonlogin: Button
+    private lateinit var buttonLogin: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         // Connect UI elements
-        buttonlogin=findViewById(R.id.buttonlogin)
         textViewTitle = findViewById(R.id.personaldetails)
         editTextName = findViewById(R.id.editText1)
         editTextJob = findViewById(R.id.editText2)
         editTextPhoneNumber = findViewById(R.id.editText3)
         editTextLocation = findViewById(R.id.editText4)
         buttonSubmit = findViewById(R.id.buttonSubmit)
+        buttonLogin = findViewById(R.id.buttonlogin)
 
-        buttonlogin.setOnClickListener {
-
-            val intent= Intent (this, LoginActivity::class.java)
-                    startActivity(intent)
+        // Navigate to LoginActivity
+        buttonLogin.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
         }
 
+        // Submit user details to Firebase
         buttonSubmit.setOnClickListener {
             val name = editTextName.text.toString().trim()
             val job = editTextJob.text.toString().trim()
@@ -49,18 +48,44 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val user = User(name, job, phone, location)
-
-            val database = FirebaseDatabase.getInstance()
-            val usersRef = database.getReference("users")
-
-            usersRef.child(phone).setValue(user)
-                .addOnSuccessListener {
-                    textViewTitle.text = "Uploaded successfully!"
-                }
-                .addOnFailureListener {
-                    textViewTitle.text = "Failed to upload"
-                }
+            checkIfUserExists(phone, name, job, location)
         }
+    }
+
+    private fun checkIfUserExists(phone: String, name: String, job: String, location: String) {
+        val usersRef = FirebaseDatabase.getInstance().getReference("users").child(phone)
+
+        usersRef.get().addOnSuccessListener { snapshot ->
+            if (snapshot.exists()) {
+                // User already registered
+                textViewTitle.text = "You are already registered. Please log in."
+            } else {
+                // User not registered, save to database
+                saveUserToFirebase(phone, name, job, location)
+            }
+        }.addOnFailureListener { e ->
+            textViewTitle.text = "Database error: ${e.message}"
+        }
+    }
+
+    private fun saveUserToFirebase(phone: String, name: String, job: String, location: String) {
+        val user = User(name, job, phone, location)
+        val usersRef = FirebaseDatabase.getInstance().getReference("users")
+
+        usersRef.child(phone).setValue(user)
+            .addOnSuccessListener {
+                textViewTitle.text = "Registered successfully! You can now log in."
+                clearFields()
+            }
+            .addOnFailureListener {
+                textViewTitle.text = "Failed to register. Please try again."
+            }
+    }
+
+    private fun clearFields() {
+        editTextName.text.clear()
+        editTextJob.text.clear()
+        editTextPhoneNumber.text.clear()
+        editTextLocation.text.clear()
     }
 }
