@@ -58,7 +58,7 @@
             android:id="@+id/editText3"
             android:layout_width="0dp"
             android:layout_height="56dp"
-            android:hint="PHONE NUMBER"
+            android:hint="PHONE NUMBER  +2547xxxxxxx"
             android:inputType="phone"
             android:textSize="20sp"
             android:padding="12dp"

@@ -7,12 +7,18 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class UserAdapter(private val userList: List<User>) :
-    RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+class UserAdapter : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+
+    private val userList: MutableList<User> = mutableListOf()
+
+    fun updateUsers(newUsers: List<User>) {
+        userList.clear()
+        userList.addAll(newUsers)
+        notifyDataSetChanged()
+    }
 
     class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        val nameTextView: TextView=itemView.findViewById(R.id.nameTextView)
+        val nameTextView: TextView = itemView.findViewById(R.id.nameTextView)
         val jobTextView: TextView = itemView.findViewById(R.id.jobTextView)
         val phoneTextView: TextView = itemView.findViewById(R.id.phoneTextView)
         val locationTextView: TextView = itemView.findViewById(R.id.locationTextView)
@@ -27,21 +33,19 @@ class UserAdapter(private val userList: List<User>) :
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val user = userList[position]
 
-        holder.nameTextView.text="Name: ${user.name}"
-        holder.jobTextView.text = "Job: ${user.job}"
-        holder.phoneTextView.text = "Phone: ${user.phone}"
-        holder.locationTextView.text = "Location: ${user.location}"
+        holder.nameTextView.text = user.name
+        holder.jobTextView.text = user.job
+        holder.locationTextView.text = user.location
+        holder.phoneTextView.text = user.phone
 
-        // 👉 CLICK LISTENER HERE
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
-            val intent = Intent(context, UserDetailsActivity::class.java)
-
-            intent.putExtra("name", user.name)
-            intent.putExtra("job", user.job)
-            intent.putExtra("phone", user.phone)
-            intent.putExtra("location", user.location)
-
+            val intent = Intent(context, UserDetailsActivity::class.java).apply {
+                putExtra("name", user.name)
+                putExtra("job", user.job)
+                putExtra("phone", user.phone)
+                putExtra("location", user.location)
+            }
             context.startActivity(intent)
         }
     }
