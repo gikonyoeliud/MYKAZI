@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Edit Details -->
+    <item
+        android:id="@+id/action_edit_details"
+        android:title="Edit Details"
+        android:icon="@android:drawable/ic_menu_edit"
+        app:showAsAction="always"/>
+
+    <!-- Block User -->
+    <item
+        android:id="@+id/action_block_user"
+        android:title="Block User"
+        android:icon="@android:drawable/ic_menu_close_clear_cancel"
+        app:showAsAction="never"/>
+
+    <!-- Unblock User -->
+    <item
+        android:id="@+id/action_unblock_user"
+        android:title="Unblock User"
+        android:icon="@android:drawable/ic_menu_revert"
+        app:showAsAction="never"/>
+
+    <!-- Sign Out -->
+    <item
+        android:id="@+id/action_sign_out"
+        android:title="Sign Out"
+        android:icon="@android:drawable/ic_lock_power_off"
+        app:showAsAction="never"/>
+
+</menu>

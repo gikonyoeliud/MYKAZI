@@ -1,8 +1,11 @@
 package com.example.mykazi
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.SearchView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
@@ -23,7 +26,18 @@ class UserListActivity : AppCompatActivity() {
         searchView = findViewById(R.id.searchView)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = UserAdapter()
+
+        adapter = UserAdapter(originalUserList) { user ->
+            Log.d("UserListActivity", "Opening details for ${user.name}")
+
+            val intent = Intent(this, UserDetailsActivity::class.java)
+            intent.putExtra("name", user.name)
+            intent.putExtra("job", user.job)
+            intent.putExtra("phone", user.phone)
+            intent.putExtra("location", user.location)
+            startActivity(intent)
+        }
+
         recyclerView.adapter = adapter
 
         db = FirebaseDatabase.getInstance().reference.child("users")
@@ -34,8 +48,7 @@ class UserListActivity : AppCompatActivity() {
 
     private fun setupSearchView() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean = true
-
+            override fun onQueryTextSubmit(query: String?) = true
             override fun onQueryTextChange(newText: String?): Boolean {
                 filterUsers(newText.orEmpty())
                 return true
@@ -45,29 +58,13 @@ class UserListActivity : AppCompatActivity() {
 
     private fun filterUsers(query: String) {
         val q = query.trim().lowercase()
-
-        if (q.isEmpty()) {
-            val sorted = originalUserList.sortedBy { it.name.lowercase() }
-            adapter.updateUsers(sorted)
-            return
-        }
-
-        // Split into words: "bot nakuru" → ["bot", "nakuru"]
-        val queryWords = q.split("\\s+".toRegex()).filter { it.isNotEmpty() }
-
-        val filtered = originalUserList.filter { user ->
-            val nameLower = user.name.lowercase()
-            val jobLower = user.job.lowercase()
-            val locationLower = user.location.lowercase()
-
-            // Match if ANY word appears in name, job, or location
-            queryWords.any { word ->
-                nameLower.contains(word) ||
-                        jobLower.contains(word) ||
-                        locationLower.contains(word)
+        val filtered = if (q.isEmpty()) {
+            originalUserList
+        } else {
+            originalUserList.filter {
+                "${it.name} ${it.job} ${it.location}".lowercase().contains(q)
             }
-        }.sortedBy { it.name.lowercase() }
-
+        }
         adapter.updateUsers(filtered)
     }
 
@@ -79,12 +76,11 @@ class UserListActivity : AppCompatActivity() {
                     val user = child.getValue(User::class.java)
                     user?.let { originalUserList.add(it) }
                 }
-                // Re-apply current search/filter
-                filterUsers(searchView.query.toString())
+                adapter.updateUsers(originalUserList)
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Handle error if needed
+                Toast.makeText(this@UserListActivity, error.message, Toast.LENGTH_LONG).show()
             }
         })
     }

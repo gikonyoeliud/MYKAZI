@@ -5,38 +5,46 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#f2f2f2"
-    android:layout_marginBottom="8dp">
+    android:layout_marginBottom="8dp"
+
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?attr/selectableItemBackground">
 
     <TextView
         android:id="@+id/nameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
+        android:clickable="false"
+        android:focusable="false" />
 
     <TextView
         android:id="@+id/jobTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Job"
         android:textSize="16sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:clickable="false"
+        android:focusable="false" />
+
     <TextView
         android:id="@+id/locationTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Location"
         android:textSize="16sp"
-        android:textStyle="bold"/>
-
+        android:textStyle="bold"
+        android:clickable="false"
+        android:focusable="false" />
 
     <TextView
         android:id="@+id/phoneTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Phone"
         android:textSize="16sp"
-        android:layout_marginTop="4dp"/>
+        android:layout_marginTop="4dp"
+        android:clickable="false"
+        android:focusable="false" />
+
 </LinearLayout>

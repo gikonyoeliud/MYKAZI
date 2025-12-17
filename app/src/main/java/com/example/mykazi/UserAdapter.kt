@@ -1,27 +1,39 @@
 package com.example.mykazi
 
-import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class UserAdapter : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+class UserAdapter(
+    private var users: List<User>,
+    private val onUserClick: (User) -> Unit
+) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
-    private val userList: MutableList<User> = mutableListOf()
+    inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun updateUsers(newUsers: List<User>) {
-        userList.clear()
-        userList.addAll(newUsers)
-        notifyDataSetChanged()
-    }
+        private val nameTextView: TextView =
+            itemView.findViewById(R.id.nameTextView)
+        private val jobTextView: TextView =
+            itemView.findViewById(R.id.jobTextView)
+        private val locationTextView: TextView =
+            itemView.findViewById(R.id.locationTextView)
+        private val phoneTextView: TextView =
+            itemView.findViewById(R.id.phoneTextView)
 
-    class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val nameTextView: TextView = itemView.findViewById(R.id.nameTextView)
-        val jobTextView: TextView = itemView.findViewById(R.id.jobTextView)
-        val phoneTextView: TextView = itemView.findViewById(R.id.phoneTextView)
-        val locationTextView: TextView = itemView.findViewById(R.id.locationTextView)
+        fun bind(user: User) {
+            nameTextView.text = user.name ?: "N/A"
+            jobTextView.text = user.job ?: "N/A"
+            locationTextView.text = user.location ?: "N/A"
+            phoneTextView.text = user.phone ?: "N/A"
+
+            itemView.setOnClickListener {
+                Log.d("UserAdapter", "Clicked user: ${user.name}")
+                onUserClick(user)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
@@ -31,24 +43,13 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        val user = userList[position]
-
-        holder.nameTextView.text = user.name
-        holder.jobTextView.text = user.job
-        holder.locationTextView.text = user.location
-        holder.phoneTextView.text = user.phone
-
-        holder.itemView.setOnClickListener {
-            val context = holder.itemView.context
-            val intent = Intent(context, UserDetailsActivity::class.java).apply {
-                putExtra("name", user.name)
-                putExtra("job", user.job)
-                putExtra("phone", user.phone)
-                putExtra("location", user.location)
-            }
-            context.startActivity(intent)
-        }
+        holder.bind(users[position])
     }
 
-    override fun getItemCount(): Int = userList.size
+    override fun getItemCount(): Int = users.size
+
+    fun updateUsers(newUsers: List<User>) {
+        users = newUsers
+        notifyDataSetChanged()
+    }
 }

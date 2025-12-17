@@ -49,7 +49,14 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    // Firebase BOM
+    implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
 
+    // Firebase Authentication (Phone)
+    implementation("com.google.firebase:firebase-auth-ktx")
+
+    // Firebase Realtime Database
+    implementation("com.google.firebase:firebase-database-ktx")
     // RecyclerView
     implementation("androidx.recyclerview:recyclerview:1.3.1")
 
