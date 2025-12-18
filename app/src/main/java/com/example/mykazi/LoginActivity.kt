@@ -5,45 +5,39 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.FirebaseDatabase
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var editTextIdName: EditText
-    private lateinit var editTextPhoneNumber: EditText
-    private lateinit var buttonRegister: Button
+    private lateinit var editTextName: EditText
+    private lateinit var editTextPhone: EditText
     private lateinit var buttonLogin: Button
+    private lateinit var buttonRegister: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_login)
 
-        // Initialize views
-        editTextIdName = findViewById(R.id.idName)
-        editTextPhoneNumber = findViewById(R.id.phoneNumber)
-        buttonRegister = findViewById(R.id.buttonRegister)
+        editTextName = findViewById(R.id.idName)
+        editTextPhone = findViewById(R.id.phoneNumber)
         buttonLogin = findViewById(R.id.buttonLogin)
+        buttonRegister = findViewById(R.id.buttonRegister)
 
-        // Login button click
         buttonLogin.setOnClickListener {
-            val name = editTextIdName.text.toString().trim()
-            val phone = editTextPhoneNumber.text.toString().trim()
+            val name = editTextName.text.toString().trim()
+            val phone = normalizePhone(editTextPhone.text.toString().trim())
 
             if (name.isEmpty() || phone.isEmpty()) {
-                Toast.makeText(this, "Please enter both name and phone number", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Enter both name and phone", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             loginUser(name, phone)
         }
 
-        // Register button click
         buttonRegister.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, MainActivity::class.java))
         }
     }
 
@@ -53,11 +47,19 @@ class LoginActivity : AppCompatActivity() {
         dbRef.get().addOnSuccessListener { snapshot ->
             if (snapshot.exists()) {
                 val dbName = snapshot.child("name").getValue(String::class.java)
-                if (dbName != null && dbName == name) {
-                    // Login successful, go to UserListActivity
-                    Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, UserListActivity::class.java)
-                    startActivity(intent)
+                val isBlocked = snapshot.child("blocked").getValue(Boolean::class.java) ?: false
+
+                if (isBlocked) {
+                    Toast.makeText(this, "Your account is blocked. Contact admin.", Toast.LENGTH_LONG).show()
+                    return@addOnSuccessListener
+                }
+
+                if (dbName == name) {
+                    // Save logged-in phone to SharedPreferences
+                    val prefs = getSharedPreferences("MyKaziPrefs", MODE_PRIVATE)
+                    prefs.edit().putString("loggedInPhone", phone).apply()
+
+                    startActivity(Intent(this, UserListActivity::class.java))
                     finish()
                 } else {
                     Toast.makeText(this, "Name does not match", Toast.LENGTH_SHORT).show()
@@ -65,8 +67,20 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "User not found", Toast.LENGTH_SHORT).show()
             }
-        }.addOnFailureListener { e ->
-            Toast.makeText(this, "Database error: ${e.message}", Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener {
+            Toast.makeText(this, "Database error: ${it.message}", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    /**
+     * Normalizes user input:
+     * - Removes spaces and dashes
+     * - Converts 0xxxx numbers to +254xxxx
+     * - Leaves +254xxxx numbers unchanged
+     */
+    private fun normalizePhone(phone: String): String {
+        var p = phone.replace(" ", "").replace("-", "")
+        if (p.startsWith("0")) p = "+254" + p.drop(1)
+        return p
     }
 }

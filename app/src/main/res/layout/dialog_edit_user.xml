@@ -1,61 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@android:color/white">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:padding="16dp"
+    <!-- Job -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Job"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp"/>
+
+    <EditText
+        android:id="@+id/editJob"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:hint="Enter your job"
+        android:inputType="textPersonName"
+        android:layout_marginBottom="12dp"
+        android:background="@android:drawable/edit_text"
+        android:padding="8dp"/>
 
-        <!-- Job -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Job"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp"/>
+    <!-- Phone -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phone"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp"/>
 
-        <EditText
-            android:id="@+id/editJob"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter your job"
-            android:inputType="textPersonName"
-            android:layout_marginBottom="12dp"/>
+    <EditText
+        android:id="@+id/editPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter your phone"
+        android:inputType="phone"
+        android:layout_marginBottom="12dp"
+        android:background="@android:drawable/edit_text"
+        android:padding="8dp"/>
 
-        <!-- Phone -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Phone"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp"/>
+    <!-- Location -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp"/>
 
-        <EditText
-            android:id="@+id/editPhone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter your phone"
-            android:inputType="phone"
-            android:layout_marginBottom="12dp"/>
-
-        <!-- Location -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Location"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp"/>
-
-        <EditText
-            android:id="@+id/editLocation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter your location"
-            android:inputType="text"
-            android:layout_marginBottom="12dp"/>
-    </LinearLayout>
-</ScrollView>
+    <EditText
+        android:id="@+id/editLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter your location"
+        android:inputType="text"
+        android:layout_marginBottom="12dp"
+        android:background="@android:drawable/edit_text"
+        android:padding="8dp"/>
+</LinearLayout>

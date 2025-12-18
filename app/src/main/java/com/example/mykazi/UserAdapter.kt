@@ -1,6 +1,6 @@
 package com.example.mykazi
 
-import android.util.Log
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,31 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 
 class UserAdapter(
     private var users: List<User>,
+    private var blockedUsers: Set<String>,
     private val onUserClick: (User) -> Unit
 ) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        private val nameTextView: TextView =
-            itemView.findViewById(R.id.nameTextView)
-        private val jobTextView: TextView =
-            itemView.findViewById(R.id.jobTextView)
-        private val locationTextView: TextView =
-            itemView.findViewById(R.id.locationTextView)
-        private val phoneTextView: TextView =
-            itemView.findViewById(R.id.phoneTextView)
-
-        fun bind(user: User) {
-            nameTextView.text = user.name ?: "N/A"
-            jobTextView.text = user.job ?: "N/A"
-            locationTextView.text = user.location ?: "N/A"
-            phoneTextView.text = user.phone ?: "N/A"
-
-            itemView.setOnClickListener {
-                Log.d("UserAdapter", "Clicked user: ${user.name}")
-                onUserClick(user)
-            }
-        }
+        val nameTextView: TextView = itemView.findViewById(R.id.userName)
+        val jobTextView: TextView = itemView.findViewById(R.id.userJob)
+        val locationTextView: TextView = itemView.findViewById(R.id.userLocation)
+        val blockedLabel: TextView = itemView.findViewById(R.id.blockedLabel)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
@@ -42,14 +26,32 @@ class UserAdapter(
         return UserViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        holder.bind(users[position])
-    }
-
     override fun getItemCount(): Int = users.size
 
-    fun updateUsers(newUsers: List<User>) {
-        users = newUsers
+    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
+        val user = users[position]
+        holder.nameTextView.text = user.name
+        holder.jobTextView.text = user.job
+        holder.locationTextView.text = user.location
+
+        if (blockedUsers.contains(user.phone)) {
+            holder.blockedLabel.visibility = View.VISIBLE
+            holder.nameTextView.setTextColor(Color.GRAY)
+            holder.jobTextView.setTextColor(Color.GRAY)
+            holder.locationTextView.setTextColor(Color.GRAY)
+        } else {
+            holder.blockedLabel.visibility = View.GONE
+            holder.nameTextView.setTextColor(Color.BLACK)
+            holder.jobTextView.setTextColor(Color.BLACK)
+            holder.locationTextView.setTextColor(Color.BLACK)
+        }
+
+        holder.itemView.setOnClickListener { onUserClick(user) }
+    }
+
+    fun updateUsers(newUsers: List<User>, newBlocked: Set<String>) {
+        this.users = newUsers
+        this.blockedUsers = newBlocked
         notifyDataSetChanged()
     }
 }
